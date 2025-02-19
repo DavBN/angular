@@ -1,262 +1,241 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:4200"); //---> Aceptación del servidor de angular
-header("Access-Control-Allow-Credentials: true"); //---> Activación de las credenciales para almacenar los datos del usuario
-header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS"); //---> Métodos para la consulta y el manejo de admnistrador    
-header("Access-Control-Allow-Headers: Content-Type, Authorization"); //---> Autorización 
-header('Content-Type: application/json'); //---> Aceptación de formato JSON para ser leído por angular
-session_start(); //---> Inicio de sesión en PHP
-require('./config/database.php'); //---> Require para traer la conexión a la base de datos
+//CORS
+header("Access-Control-Allow-Origin: http://localhost:4200"); //Angular
+header("Access-Control-Allow-Credentials: true"); // Credenciales
+header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS"); //Accione
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); //Cabeceras
+header('Content-Type: application/json'); // Contenido
+session_start(); // Inicio de sesion
+require('./config/database.php'); // Conexión a la base de datos
 
-
-//---> FUNCIONES DEL SOFTWARE Y CONSULTAS <---//
-function crearUsuario($nombre, $email, $rol, $password) //---> Función para la creación de usuarios
+// FUNCIONES DEL SOFTWARE
+function crearUsuario($nombre, $email, $rol, $password) //Función de crear el usuario
 {
-    global $conn; //---> Global con la conexión 
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT); //---> Función que hashea la contraseña para almacenarla
-    $sql = "INSERT INTO usuarios (nombre, email, rol, password) VALUES (?, ?, ?, ?)"; //---> Inserción de los datos ingresados
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada para evitar inyección SQL
-    $stmt->bind_param("ssss", $nombre, $email, $rol, $passwordHash); //---> Sentencia preparada para evitar inyección SQL
-    return $stmt->execute(); //---> Retorna la sentencia ejecutada
+    global $conn; // Conexión
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT); // Hash para encriptar la contraseña
+    $sql = "INSERT INTO usuarios (nombre, email, rol, password) VALUES (?, ?, ?, ?)"; // Hace la consulta SQL
+    $stmt = $conn->prepare($sql); // Se prepara la consulta
+    $stmt->bind_param("ssss", $nombre, $email, $rol, $passwordHash); // Se toiman los parametros
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
-
-function iniciarSesion($email, $password) //---> Función de iniciar sesión
+function iniciarSesion($email, $password) // Función para iniciar sesión
 {
-    global $conn; //---> Global con la conexión
-    $sql = "SELECT * FROM usuarios WHERE email= ?"; //---> Seleccionar el usuario de acuerdo a su email en la base de datos
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada para evitar inyección SQL
-    $stmt->bind_param("s", $email); //---> Sentencia preparada para evitar inyección SQL
-    $stmt->execute(); //---> Ejecución de consulta
-    $result = $stmt->get_result(); //---> Retorna el resultado de la consulta
-    if ($result && $result->num_rows > 0) { //---> Comprobación de que el resultado es válido y no vacío o nulo
-        $usuario = $result->fetch_assoc(); //---> Obtención del primer resultado y se guarda como un array asociativo
-        if (password_verify($password, $usuario['password'])) { //---> Verificación de la contraseña que proporciona el usuario, se compara con la de la base de datos
-            $_SESSION['usuario_id'] = $usuario['id']; //---> Almacena el id del usuario para ser manejado en sesión
-            $_SESSION['usuario_nombre'] = $usuario['nombre']; //---> Almacena el nombre del usuario en sesión
-            $_SESSION['usuario_rol'] = $usuario['rol']; //---> Almacena el rol del usuario para manejo de sesión dependiendo de su rol
-            $_SESSION['usuario_email'] = $usuario['email']; //---> Almacena el correo del usuario en sesión
-            return $usuario; //---> Retorna los datos del usuario en array
+    global $conn; // Conexión
+    $sql = "SELECT * FROM usuarios WHERE email = ?"; // Consulta 
+    $stmt = $conn->prepare($sql); // Se prepara la consulta
+    $stmt->bind_param("s", $email); // Se toman parametros
+    $stmt->execute(); // Se ejecuta la consulta
+    $result = $stmt->get_result(); // Obtiene el resultado
+    if ($result && $result->num_rows > 0) { // Válida si hay un resultado
+        $usuario = $result->fetch_assoc(); // Obtiene el usuario
+        if (password_verify($password, $usuario['password'])) { // Válida la contraseña de este
+            $_SESSION['usuario_id'] = $usuario['id']; // Guarda en sesión el id del usuario
+            $_SESSION['usuario_nombre'] = $usuario['nombre']; // Guarda en sesión el nombre del usuario
+            $_SESSION['usuario_rol'] = $usuario['rol']; // Guarda en sesión el rol del usuario
+            $_SESSION['usuario_email'] = $usuario['email']; // Guarda en sesión el email del usuario
+            return $usuario; // Retorna el usuario con sus datos
         }
     }
-    return null; //---> Retorna null si no se cumple el bloque if inicial
+    return null; // Si no hay un usuario retorna null
 }
 
-
-function crearProducto($nombreProducto, $precio) //---> Función para crear productos
+function crearProducto($nombreProducto, $precio) // Función para crear el producto
 {
-    global $conn; //---> Global con la conexión
-    $usuarioId = $_SESSION['usuario_id']; //---> Obtiene el id del usuario que está en sesión, previamente debe iniciar sesión
-    $sql = "INSERT INTO productos (nombre, precio, id_usuario) VALUES (?,?,?)"; //---> Inserción de los datos proporcionados y los almacena en base de datos
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada para evitar inyección SQL
-    $stmt->bind_param("sdi", $nombreProducto, $precio, $usuarioId); //---> Sentencia preparada con los valores
-    return $stmt->execute(); //---> Retorna la ejecución de de la consulta
+    global $conn; // Conexión
+    $usuarioId = $_SESSION['usuario_id']; // // Se obtiene el id del usuario en sesión
+    $sql = "INSERT INTO productos (nombre, precio, id_usuario) VALUES (?, ?, ?)"; // Consulta SQL
+    $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
+    $stmt->bind_param("sdi", $nombreProducto, $precio, $usuarioId); // Se toman parametros
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
-
-function eliminarUsuario($usuarioId) //---> Función para eliminar usuarios
+function eliminarUsuario($usuarioId) // Función para eliminar un usuario
 {
-    global $conn; //---> Global con la conexión
-    $sql = "DELETE FROM usuarios WHERE id=?"; //---> Eliminación del usuario por medio de su id
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada y consulta
-    $stmt->bind_param("i", $usuarioId); //---> Parametros de la sentencia
-    return $stmt->execute(); //---> Retorna la ejecución de la consulta
+    global $conn; // Conexión
+    $sql = "DELETE FROM usuarios WHERE id = ?"; // Consulta SQL
+    $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
+    $stmt->bind_param("i", $usuarioId); // Se toman parametros
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
-function eliminarProducto($productoId) //---> Función para eliminar productos
+function eliminarProducto($productoId) // Función para eliminar un producto
 {
-    global $conn;  //---> Global con la conexión
-    $sql = "DELETE FROM productos WHERE id=?"; //---> Eliminación del producto por su id
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada y consulta
-    $stmt->bind_param("i", $productoId); //---> Parametros de la sentencia
-    return $stmt->execute(); //---> Retorna la ejecución de la consulta
+    global $conn; // Conexión
+    $sql = "DELETE FROM productos WHERE id = ?"; // Consulta SQL
+    $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
+    $stmt->bind_param("i", $productoId); // Se toman parametros
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
-
-function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) //---> Función para actualizar usuario
+function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) // Función para actualizar los usuarios
 {
-    global $conn; //---> Global con la conexión
-    $sql = "UPDATE usuarios SET nombre= ?, email= ?, rol= ?"; //---> Actualización de usuario en base de datos
-    if ($password) { //---> Verificación de la contraseña
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT); //---> Método de hasheo para guardarla
-        $sql .= ", password = ?"; //---> Valor contraseña
+    global $conn; // Conexión
+    $sql = "UPDATE usuarios SET nombre = ?, email = ?, rol = ?"; // Consulta SQL
+    if ($password) { // Verifica si hay una contraseña
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT); // Se encripta la contraseña
+        $sql .= ", password = ?"; // Se agrega la contraseña a la consulta
     }
-    $sql .= " WHERE id=?"; //---> Id del usuario en base de datos
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada y consulta
-    if ($password) { //---> Verificación de contraseña a actualizar si es así la guarda
-        $stmt->bind_param("ssssi", $nombre, $email, $rol, $passwordHash, $usuarioId); //---> Parametros a guardar
-    } else { //---> Si no hay contraseña se guardan solo los valores
-        $stmt->bind_param("ssss",  $nombre, $email, $rol, $usuarioId); //---> Parametros a guardar
+    $sql .= " WHERE id = ?"; // Se agrega el id a la consulta
+    $stmt = $conn->prepare($sql); // Se prepara la consulta 
+    if ($password) { // Verifica si hay una contraseña
+        $stmt->bind_param("ssssi", $nombre, $email, $rol, $passwordHash, $usuarioId); // Toma de parametros
+    } else { // si no hay contraseña se procede
+        $stmt->bind_param("sssi", $nombre, $email, $rol, $usuarioId); // Toma de parametros
     }
-    return $stmt->execute(); //---> Retorna la ejecución de la consulta
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
-
-function actualizarProducto($productoId, $nombreProducto, $precio) //---> Función par actualizar un producto
+function actualizarProducto($productoId, $nombreProducto, $precio) // Función para actualizar los productos
 {
-    global $conn; //---> Global con la conexión
-    $sql = "UPDATE productos SET nombre=?, precio=? WHERE id=?"; //---> Actualización del producto en base de datos
-    $stmt = $conn->prepare($sql); //---> Sentencia preparada y consulta
-    $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId); //---> Parametros a guardar en consulta
-    return $stmt->execute(); //---> Retorna la ejecución de la consulta
+    global $conn; // Conexión
+    $sql = "UPDATE productos SET nombre = ?, precio = ? WHERE id = ?"; // Consulta SQL
+    $stmt = $conn->prepare($sql); // Se prepara la consulta
+    $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId); // Se toman parametros
+    return $stmt->execute(); // Se ejecuta la consulta
 }
 
 
-//---> LÓGICA DE LAS FUNCIONES <---//
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación de la solicitud, en este caso es post para envio de información al servidor
-    global  $conn; //---> Global con la conexión
-    $data = json_decode(file_get_contents("php://input"), true); //---> Toma los datos enviados en JSON y los pasa al array asociativo
-    if (isset($data['accion'])) { //---> Verificación de que accion este dentro de los datos
-        if ($data['accion'] === 'crear_usuario') { //---> Si la acción es de crear el usuario pues se crea un usuario
-            if ($_SESSION['usuario_rol'] === 'admin' && isset($data['nombre'], $data['rol'], $data['password'], $data['email'])) { //---> Verificación del rol en sesión
-                $nombre = $data['nombre']; //---> Valor del nombre en variable
-                $rol = $data['rol']; //---> Valor del rol en variable
-                $password = $data['password']; //---> Valor de la contraseña en variable
-                $email = $data['email']; //---> Valor del correo en variable
-                if (crearUsuario($nombre, $email, $rol, $password)) { //---> Se hace el llamado a la función para crear el usuario - solo si es true devuelve el mensaje de éxito
-                    echo json_encode(['status' => 'success', 'message' => 'El usuario ha sido creado con éxito']); //---> De tener éxito devuelve el mensaje de éxito
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Erro al crear el usuario']); //---> De retornar false devuelve un error al crear el usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la petición es POST
+    $data = json_decode(file_get_contents("php://input"), true); // Obtiene los datos de la petición
+    if (isset($data['accion'])) { // Verificación de si hay una acción
+        switch ($data['accion']) { // Switch para manejar las acciones por casos
+            case 'crear_usuario': // Caso 1 para crear un usuario
+                if ($_SESSION['usuario_rol'] === 'admin' && isset($data['nombre'], $data['email'], $data['rol'], $data['password'])) { // Verifica si el usuario es admin y contiene los datos del mismo
+                    if (crearUsuario($data['nombre'], $data['email'], $data['rol'], $data['password'])) { // Verifica si se crea el usuario
+                        echo json_encode(['status' => 'success', 'message' => 'Usuario creado con éxito']); // Mensaje de éxito en caso de tenerlo
+                    } else { // si el usuario no se pudo crear
+                        echo json_encode(['status' => 'error', 'message' => 'Error al crear el usuario']); // Mensaje de error al crear el usuario
+                    }
+                } else { // Si el usuario no es admin o no tiene los datos permitidos
+                    echo json_encode(['status' => 'error', 'message' => 'Acceso denegado o datos incompletos']); // Mensaje de error no tiene acceso al apartado
                 }
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'No tienes acceso, solo administradores']); //---> De no ser admin o los datos no son, devuelve el error
-            }
-        }
+                break; // Fin del caso y sale
 
-        //---> Inicio de sesión
-        elseif ($data['accion'] === 'login') { //---> Validación de la acción y si es login se querrá iniciar sesión
-            $email = $data['email'] ?? ''; //---> Valor del correo en variable
-            $password = $data['password'] ?? ''; //---> Valor de la contraseña en variable
-            $usuario = iniciarSesion($email, $password); //---> Se hace el llamado a la función de inicio de sesión y se pasan los valores para verificación de inicio
-            if ($usuario) { //---> Verificación para la función para saber si es un usuario válido
-                $_SESSION['usuario_rol'] = $usuario['rol']; //---> Se guarda el rol del usuario en sesión
-                echo json_encode([ //---> Array que contiene mensaje de éxito en JSON
-                    'status' => 'success', //---> Estado de éxito
-                    'message' => 'Inicio de sesión con éxito', //---> Mensaje de éxito
-                    'usuario' => $usuario, //---> Envuelve todos los datos del usuario
-                    'rol' => $usuario['rol'] //---> Se incluye el rol del usuario
-                ]);
-            } else { //---> De no ser encontrado el user o que los datos proporcionados por el no coincidan se procede al error
-                echo json_encode(['status' => 'error', 'message' => 'Error al iniciar sesión']); //---> Mensaje de error
-            }
-        }
-
-        //---> Creación de producto por el cliente o usuario
-        elseif ($data['accion'] === 'crear_producto') { //---> Validación del la acción y si es crear un producto se querrá crear un producto
-            if (isset($_SESSION['usuario_id'])) { //---> Verificación si el usuario inicio sesión y si existe el mismo con ese id
-                $nombreProducto = $data['nombre_producto'] ?? ''; //---> Valor del nombre producto en variable
-                $precio = $data['precio'] ?? 0; //---> Valor del precio de producto en variable
-                if (crearProducto($nombreProducto, $precio)) { //---> Verificación de la función para el intento de crear un producto con los datos ingresados
-                    echo json_encode(['status' => 'success', 'message' => 'El producto ha sido creado con éxito']); //---> De tener éxito se crea el producto y muestra mensaje
-                } else { //---> De encontrarse un error se muestra un mensaje de error
-                    echo json_encode(['status' => 'error', 'message' => 'No se puedo crear el producto']); //---> Mensaje de error
+            case 'login': // Caso 2 para inicio de sesión
+                if (isset($data['email'], $data['password'])) { // Verificación de datos
+                    $usuario = iniciarSesion($data['email'], $data['password']); // Datos de inicio de sesión
+                    if ($usuario) { // Valida si un usuario existe
+                        echo json_encode(['status' => 'success', 'message' => 'Inicio de sesión exitoso', 'usuario' => $usuario]); // Mensaje de éxito en caso de que exista el usuario con esos datos
+                    } else { // De no existir el usuario o poner datos incorrectos
+                        echo json_encode(['status' => 'error', 'message' => 'Credenciales incorrectas']); // Mensaje de error al colocar datos incorrectos
+                    }
+                } else { // Si no se ponen los datos completos
+                    echo json_encode(['status' => 'error', 'message' => 'Datos incompletos']); // Mensaje de error al poner datos incorrectos o incompletos
                 }
-            } else { //---> Si el usuario no ha iniciado sesión debe iniciar primero sesión para realizar una acción
-                echo json_encode(['status' => 'error', 'message' => 'Debes iniciar primero sesión']); //---> Mensaje de inicio
-            }
-        }
+                break; // Fin del caso y sale
 
-        //---> Eliminación de usuarios solo por el administrador o el que tenga rol de admin
-        elseif ($data['accion'] === 'eliminar_usuario') { //---> Validación de la acción y si es eliminar usuario se querrá eliminar un usuario
-            if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'])) { //---> Verificación de que el usuario tenga el rol admin y si se envia el id del usuario que se desea eliminar
-                $usuarioId = $data['usuario_id']; //---> Se aigna el id del usuario a eliminar
-                if (eliminarUsuario($usuarioId)) { //---> Verificación de la función de eliminar usuario para intentar eliminar el usuario
-                    echo json_encode(['status' => 'success', 'message' => 'EL usuario ha sido eliminado con éxito']); //---> De tener éxito muestra el mensaje de éxito
-                } else { //---> De fallar la eliminación del usuario muestra mensaje de error
-                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el usuario']); //---> Mensaje de error
+            case 'crear_producto': // Caso 3 para crear el producto
+                if (isset($_SESSION['usuario_id'], $data['nombre_producto'], $data['precio'])) { // Verifica los datos del producto y el usuario id que lo creo
+                    if (crearProducto($data['nombre_producto'], $data['precio'])) { // Verifica si se crea el producto
+                        echo json_encode(['status' => 'success', 'message' => 'Producto creado con éxito']); // Mensaje de éxito al crear un producto
+                    } else { // En caso no de crearse el producto
+                        echo json_encode(['status' => 'error', 'message' => 'Error al crear el producto']); // Mensaje de error que indica que hubo error al crear el producto
+                    }
+                } else { // En caso de no haber iniciado sesión o poner datos incorrectos
+                    echo json_encode(['status' => 'error', 'message' => 'Debes iniciar sesión o datos incompletos']); // Mensaje de error de primero iniciar sesión o poner datos correctos
                 }
-            } else { //---> De no haber iniciado sesión o de no ser administrador mostrará el mensaje de error
-                echo json_encode(['status' => 'error', 'message' => 'No tienes acceso']); //---> Mensaje de error
-            }
-        }
+                break; // Fin del caso y sale
 
-        //---> Actualizar usuario pero solo el administrador
-        elseif ($data['accion'] === 'actualizar_usuario') { //---> validación de la acción y si es actualizar usuario se querrá actualizar un usuario
-            if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'], $data['nombre'], $data['rol'], $data['email'])) { //---> Verifica si el usuario tiene el rol admin y los datos del usuario a actualizar
-                $usuarioId = $data['usuario_id']; //---> Se asigna el id del usuario a actualizar
-                $nombre = $data['nombre']; //---> Valor del nombre en variable
-                $rol = $data['rol']; //---> Valor del rol en variable
-                $email = $data['email']; //---> Valor del correo en variable
-                $password = $data['password'] ?? null; //---> Valor de la contraseña en variable
-                if (actualizarUsuario($usuarioId, $nombre, $email, $rol, $password)) { //---> Verificación de la función actualizar usuario para intentar actualizar el mismo
-                    echo json_encode(['status' => 'success', 'message' => 'El usuario ha sido actualizado con éxito']); //---> De tener éxito la operación muestra mensaje de éxito
-                } else { //---> De haber tenido un error se muestra un mensaje de error
-                    echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el usuario']); //---> Mensaje de error
+            case 'eliminar_usuario': // Caso 4 para eliminar el usuario
+                if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'])) { // Verifica si el usuario es admin y si se usa el id del usuario a eliminar
+                    if (eliminarUsuario($data['usuario_id'])) { // Verifica si se elimina ese usuario
+                        echo json_encode(['status' => 'success', 'message' => 'Usuario eliminado con éxito']); // Mensaje de éxito en caso de eliminar con éxito el usuario
+                    } else { // En caso de no haber eliminado el usuario
+                        echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el usuario']); // Mensaje de error al no poder eliminar el usuario
+                    }
+                } else { // En caso de no ser el administrador
+                    echo json_encode(['status' => 'error', 'message' => 'Acceso denegado o datos incompletos']); // Mensaje de error por temas de acceso
                 }
-            } else { //---> De no haber iniciado sesión o no tener el rol de administrador se muestra mensaje de error
-                echo json_encode(['status' => 'error', 'message' => 'No tienes acceso']); //---> Mensaje de error
-            }
-        }
+                break; // Fin del caso y sale
 
-        //---> Actualizar producto admin o usuario
-        elseif ($data['accion'] === 'actualizar_producto') { //---> Validación de la acción si es actualizar producto se querrá actualizar un producto
-            //var_dump($_SESSION['usuario_id'], $_SESSION['usuario_rol']);
-            if (
-                isset($_SESSION['usuario_id']) && //---> Se comprueba que el usuario este autenticado
-                (isset($_SESSION['usuario_rol']) && //---> Se comprueba que se le asigne un rol al usuario
-                    ($_SESSION['usuario_rol'] === 'admin' || $_SESSION['usuario_rol'] === 'usuario')) && //---> Se comprueba si el rol es admin o usuario
-                isset($data['producto_id'], $data['nombre_producto'], $data['precio']) //---> Se comprueba que se envian los datos que se requieren
-            ) {
-                $productoId = $data['producto_id']; //---> Id del producto que se quiere actualizar
-                $nombreProducto = $data['nombre_producto']; //---> Aquí se asigna el nuevo nombre del producto
-                $precio = $data['precio']; //---> Aquí se asigna el nuevo precio del producto
-                if (actualizarProducto($productoId, $nombreProducto, $precio)) { //---> Verificación de la función actualizar producto para intentar actualizar un producto
-                    echo json_encode(['status' => 'success', 'message' => 'El producto ha sido actualizado con éxito']); //---> De tener éxito la operación se muestra mensaje de éxito
-                } else { //---> De fallar la operación se muestra un mensaje de error
-                    echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el producto']); //---> Mensaje de error
+            case 'actualizar_usuario': // Caso 5 para actualizar los datos del usuario
+                if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'], $data['nombre'], $data['email'], $data['rol'])) { // Se verifica si es admin y si tiene los datos del usuario
+                    $password = $data['password'] ?? null; // Verifica si existe una contraseña
+                    if (actualizarUsuario($data['usuario_id'], $data['nombre'], $data['email'], $data['rol'], $password)) { // Verificación de si se actualiza el usuario
+                        echo json_encode(['status' => 'success', 'message' => 'Usuario actualizado con éxito']); // Mensaje de éxito en caso de actualizar con éxito los datos del usuario
+                    } else { // En caso de no poder actualizar los datos
+                        echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el usuario']); // Mensaje de error al no poder actualizar los datos del usuario
+                    }
+                } else { // En caso no ser admin
+                    echo json_encode(['status' => 'error', 'message' => 'Acceso denegado o datos incompletos']); // Mensaje de error de acceso denegado 
                 }
-            } else { //---> De no haber iniciado sesión o no ser administrador se muestra mensaje de error
-                echo json_encode(['status' => 'error', 'message' => 'No tienes acceso']); //---> Mensaje de error
-            }
-        }
+                break; // Fin del caso y sale
 
-        // ---> Eliminar producto solo admin
-        elseif ($data['accion'] === 'eliminar_producto') { //---> Validación de la acción eliminar producto y si es, se querrá eliminar un producto
-            if ($_SESSION['usuario_rol'] === 'admin' && isset($data['producto_id'])) { //---> Se comprueba que el rol del usuario sea admin y que se envíe el id del producto
-                $productoId = $data['producto_id']; //---> Se asigna el id del producto a eliminar
-                if (eliminarProducto($productoId)) { //---> Verificación de la función eliminar producto para intentar eliminar el producto
-                    echo json_encode(['status' => 'success', 'message' => 'El producto ha sido eliminado con éxito']); //---> De tener éxito se muestra mensaje de éxito
-                } else { //---> De fallar la operación de muestra mensaje de error
-                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']); //---> Mensaje de error
+            case 'actualizar_producto': // Caso 6 para actualizar los productos
+                if (isset($_SESSION['usuario_id'], $data['producto_id'], $data['nombre_producto'], $data['precio'])) { // Verifica si hay inicio de sesión y los datos del producto
+                    if (actualizarProducto($data['producto_id'], $data['nombre_producto'], $data['precio'])) { // Verifica si se actualizan los datos del producto
+                        echo json_encode(['status' => 'success', 'message' => 'Producto actualizado con éxito']); // Mensaje de éxito en caso de actualizar correctamente los datos
+                    } else { // En caso de no poder actualizar los datos
+                        echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el producto']); // Mensaje de error al no poder actualizar los nuevos datos del producto
+                    }
+                } else { // En caso de no haber iniciado una sesión no podrá hacer la acción
+                    echo json_encode(['status' => 'error', 'message' => 'Debes iniciar sesión o datos incompletos']); // Mensaje de error de debes iniciar sesión primero
                 }
-            } else { //---> De no haber iniciado sesión o de no ser administrador se muestra mensaje de error
-                echo json_encode(['status' => 'error', 'message' => 'No tienes acceso']); //---> Mensaje de error
-            }
+                break; // Fin del caso y sale
+
+            case 'eliminar_producto': // Caso 7 para eliminar un producto
+                if ($_SESSION['usuario_rol'] === 'admin' && isset($data['producto_id'])) { // Verifica si es admin y si se tiene el id del producto
+                    if (eliminarProducto($data['producto_id'])) { // Verificación de si se elimina el producto
+                        echo json_encode(['status' => 'success', 'message' => 'Producto eliminado con éxito']); // Mensaje de éxito en caso de eliminar el producto correctamente
+                    } else { // En caso de no poder eliminar el producto
+                        echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']); // Mensaje de error de no poder eliminar el producto
+                    }
+                } else { // En caso de no ser admin
+                    echo json_encode(['status' => 'error', 'message' => 'Acceso denegado o datos incompletos']); // Mensaje de error de acceso denegado
+                }
+                break; // Fin del caso y sale
+
+            case 'logout': // Caso 8 para cerrar la sesión
+                session_unset(); // Limpia la sesión del usuario
+                session_destroy(); // Destruye la sesión del usuario
+                echo json_encode(['status' => 'success', 'message' => 'Sesión cerrada con éxito']); // Mensaje de éxito para inidicar el correcto cierre de sesión
+                break; // Fin del caso y sale
+
+            default: // Caso por defecto
+                echo json_encode(['status' => 'error', 'message' => 'Acción no válida']); // Mensaje de error de una acción no válida
+                break; // Fin del caso y sale
         }
+    } else { // En caso de no existir una acción
+        echo json_encode(['status' => 'error', 'message' => 'No hay una acción especifica']); // Mensaje de error no haber indicado una acción
     }
-}
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') { // Verificación del método de la petición es get
+    if (isset($_GET['accion'])) { // Verifica si hay una acción
+        switch ($_GET['accion']) { // Switch para manejar los casos
+            case 'listar_usuarios': // Caso 1 para listar los usuarios
+                if ($_SESSION['usuario_rol'] === 'admin') { // Verifica si el usuario es admin
+                    $sql = "SELECT * FROM usuarios"; // Consulta SQL
+                    $result = $conn->query($sql); // Se ejecuta la consulta
+                    $usuarios = []; // Se crea un arreglo de usuario
+                    while ($row = $result->fetch_assoc()) { // Se recorre el resultado 
+                        $usuarios[] = $row; // Se agrega el resultado al arreglo
+                    }
+                    echo json_encode(['usuarios' => $usuarios]); // Se muestra el resultado del arreglo
+                } else { // En caso de no ser admin
+                    echo json_encode(['status' => 'error', 'message' => 'no tienes acceso']); // Mensaje de error no tiene el acceso
+                }
+                break; // Fin del caso y sale
 
+            case 'listar_productos': // Caso 2 para listar los productos
+                $sql = "SELECT * FROM productos"; // Consulta SQL
+                $result = $conn->query($sql); // Se ejecuta la consulta
+                $productos = []; // Se crea un arreglo de productos
+                while ($row = $result->fetch_assoc()) { // Recorre el resultado 
+                    $productos[] = $row; // Se agrega el resultado al arreglo
+                }
+                echo json_encode(['productos' => $productos]); // Se muestra el resultado del arreglo
+                break; // Fin del caso y sale
 
-//---> Listado de todos los usuarios en base de datos
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['accion']) && $_GET['accion'] === 'listar_usuarios') { //---> Se comprueba que el método sea get y si la acción es listar usuarios
-    if ($_SESSION['usuario_rol'] === 'admin') { //---> Se valida que el rol del usuario sea admin para poder visualizar el listado de usuarios
-        $sql = "SELECT * FROM usuarios"; //---> Se prepara la consulta que obtiene todos los usuarios
-        $result = $conn->query($sql); //---> Se ejecuta la consulta en base de datos
-        $usuarios = []; //---> Se crea un array vacío que contendrá los usuarios
-        while ($row = $result->fetch_assoc()) { //---> se recorre cada fila y se añade al array de usuarios
-            $usuarios[] = $row; //---> Proceso
+            default: // Caso por defecto
+                echo json_encode(['status' => 'Error', 'message' => 'Acción no válida']); // Mensaje de error de acción no válida
+                break; // Fin del caso y sale
         }
-        echo json_encode(['usuarios' => $usuarios]); //---> Se devuelve los usuarios en JSON
-    } else { //---> De no haber iniciado sesión o no ser administrador devulve un mensaje de error
-        echo json_encode(['status' => 'error', 'message' => 'No tienes acceso']); //---> Mensaje de error
+    } else { // En caso de existir una acción
+        echo json_encode(['status' => 'Error', 'message' => 'No hay una acción especifica, por favor redireccione']); // Mensaje de error de no haber una acción
     }
+} else { // En caso de no ser un método ya sea post o get
+    echo json_encode(['status' => 'Error', 'message' => 'No soportado']); // Mensaje de error de no soportado
 }
 
-//---> Listado de todos los productos en base de datos
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['accion']) && $_GET['accion'] === 'listar_productos') { //---> Se comprueba que el método es get y que la acción es listar productos
-    $sql = "SELECT * FROM productos"; //---> Se prepara la consulta que obtiene todos los productos
-    $result = $conn->query($sql); //---> Se ejecuta la consulta en base de datos
-    $productos = []; //---> Se crea un array vacío que contendrá los productos
-    while ($row = $result->fetch_assoc()) { //---> se recorre cada fila y se añade al array de productos
-        $productos[] = $row; //---> Proceso
-    }
-    echo json_encode(["productos" => $productos]); //---> Se devuelven los productos en JSON
-}
-
-//---> Cerrar Sesión
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data['accion']) && $data['accion'] === 'logout') { //---> Se comprueba que el método sea post y que la acción sea cerrar sesión
-    session_unset(); //---> Limpia toda variable de sesión
-    session_destroy(); //---> Destruye la sesión actual
-    echo json_encode(['status' => 'success', 'message' => 'Sesión finalizada con éxito']); //---> Se devuelve el mensaje de éxito en JSON
-}
-exit; //---> Finalización del script una vez se procese la solicitud
-$conn->close(); //---> Se cierra la conexión a la base de datos
+$conn->close(); // Cierre de la conexión
+exit; // Fin del script
