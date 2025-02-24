@@ -239,3 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
 
 $conn->close(); // Cierre de la conexión
 exit; // Fin del script
+
+
+//INVESTIGANDO PARA CREAR LA FUNCIONALIDAD QUE PERMITIRA LA VISUALIZACIÓN DE IMAGENES EN LOS PRODUCTOS, COMO TAMBIÉN ACTUALIZARLA.
