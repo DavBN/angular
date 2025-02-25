@@ -40,13 +40,13 @@ function iniciarSesion($email, $password) // Función para iniciar sesión
     return null; // Si no hay un usuario retorna null
 }
 
-function crearProducto($nombreProducto, $precio) // Función para crear el producto
+function crearProducto($nombreProducto, $precio, $imagen) // Función para crear el producto
 {
     global $conn; // Conexión
     $usuarioId = $_SESSION['usuario_id']; // // Se obtiene el id del usuario en sesión
-    $sql = "INSERT INTO productos (nombre, precio, id_usuario) VALUES (?, ?, ?)"; // Consulta SQL
+    $sql = "INSERT INTO productos (nombre, precio, imagen, id_usuario) VALUES (?, ?, ?, ?)"; // Consulta SQL
     $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
-    $stmt->bind_param("sdi", $nombreProducto, $precio, $usuarioId); // Se toman parametros
+    $stmt->bind_param("sdi", $nombreProducto, $precio, $imagen, $usuarioId); // Se toman parametros
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
@@ -86,12 +86,20 @@ function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) 
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
-function actualizarProducto($productoId, $nombreProducto, $precio) // Función para actualizar los productos
+function actualizarProducto($productoId, $nombreProducto, $precio, $imagen) // Función para actualizar los productos
 {
     global $conn; // Conexión
-    $sql = "UPDATE productos SET nombre = ?, precio = ? WHERE id = ?"; // Consulta SQL
-    $stmt = $conn->prepare($sql); // Se prepara la consulta
-    $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId); // Se toman parametros
+    $sql = "UPDATE productos SET nombre = ?, precio = ?";
+    if($imagen) {
+        $sql .= ", imagen = ?";
+    }
+    $sql .= " WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    if($imagen) {
+        $stmt->bind_param("sdss", $nombreProducto, $precio, $imagen, $productoId);
+    } else {
+        $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId);
+    }
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
@@ -127,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
 
             case 'crear_producto': // Caso 3 para crear el producto
                 if (isset($_SESSION['usuario_id'], $data['nombre_producto'], $data['precio'])) { // Verifica los datos del producto y el usuario id que lo creo
-                    if (crearProducto($data['nombre_producto'], $data['precio'])) { // Verifica si se crea el producto
+                    if (crearProducto($data['nombre_producto'], $data['precio'], $data['imagen'])) { // Verifica si se crea el producto
                         echo json_encode(['status' => 'success', 'message' => 'Producto creado con éxito']); // Mensaje de éxito al crear un producto
                     } else { // En caso no de crearse el producto
                         echo json_encode(['status' => 'error', 'message' => 'Error al crear el producto']); // Mensaje de error que indica que hubo error al crear el producto
@@ -136,6 +144,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
                     echo json_encode(['status' => 'error', 'message' => 'Debes iniciar sesión o datos incompletos']); // Mensaje de error de primero iniciar sesión o poner datos correctos
                 }
                 break; // Fin del caso y sale
+
+            case 'subir_imagen':
+                if ($_FILES['imagen'] && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = 'imagenes/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    $fileName = uniqid() . '_' . basename($_FILES['imagen']['name']);
+                    $filePath = $uploadDir . $fileName;
+
+                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filePath)) {
+                        echo json_encode(['status' => 'success', 'message' => 'La imagen fue subida con éxito', 'url' => $filePath]);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Ocurrio un error al cambiar la imagen']);
+                    }
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Ocurrrio un error al subir la imagen']);
+                }
+                break;
 
             case 'eliminar_usuario': // Caso 4 para eliminar el usuario
                 if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'])) { // Verifica si el usuario es admin y si se usa el id del usuario a eliminar
@@ -164,7 +191,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
 
             case 'actualizar_producto': // Caso 6 para actualizar los productos
                 if (isset($_SESSION['usuario_id'], $data['producto_id'], $data['nombre_producto'], $data['precio'])) { // Verifica si hay inicio de sesión y los datos del producto
-                    if (actualizarProducto($data['producto_id'], $data['nombre_producto'], $data['precio'])) { // Verifica si se actualizan los datos del producto
+                    $imagen = $data['imagen'] ?? null; // Verificación de si hay una imagen
+                    if (actualizarProducto($data['producto_id'], $data['nombre_producto'], $data['precio'], $imagen)) { // Verifica si se actualizan los datos del producto
                         echo json_encode(['status' => 'success', 'message' => 'Producto actualizado con éxito']); // Mensaje de éxito en caso de actualizar correctamente los datos
                     } else { // En caso de no poder actualizar los datos
                         echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el producto']); // Mensaje de error al no poder actualizar los nuevos datos del producto
