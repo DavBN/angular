@@ -40,12 +40,13 @@ function iniciarSesion($email, $password) // Función para iniciar sesión
     return null; // Si no hay un usuario retorna null
 }
 
-function crearProducto($nombreProducto, $precio, $imagen) // Función para crear el producto
+function crearProducto($nombreProducto, $precio, $imagen = null) // Función para crear el producto
 {
     global $conn; // Conexión
     $usuarioId = $_SESSION['usuario_id']; // // Se obtiene el id del usuario en sesión
     $sql = "INSERT INTO productos (nombre, precio, imagen, id_usuario) VALUES (?, ?, ?, ?)"; // Consulta SQL
     $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
+    $imagen = $imagen ?? null;
     $stmt->bind_param("sdi", $nombreProducto, $precio, $imagen, $usuarioId); // Se toman parametros
     return $stmt->execute(); // Se ejecuta la consulta
 }
@@ -86,7 +87,7 @@ function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) 
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
-function actualizarProducto($productoId, $nombreProducto, $precio, $imagen) // Función para actualizar los productos
+function actualizarProducto($productoId, $nombreProducto, $precio, $imagen = null) // Función para actualizar los productos
 {
     global $conn; // Conexión
     $sql = "UPDATE productos SET nombre = ?, precio = ?";
