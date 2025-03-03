@@ -46,8 +46,7 @@ function crearProducto($nombreProducto, $precio, $imagen = null) // Función par
     $usuarioId = $_SESSION['usuario_id']; // // Se obtiene el id del usuario en sesión
     $sql = "INSERT INTO productos (nombre, precio, imagen, id_usuario) VALUES (?, ?, ?, ?)"; // Consulta SQL
     $stmt = $conn->prepare($sql); // Se prepara la consulta SQL
-    $imagen = $imagen ?? null;
-    $stmt->bind_param("sdi", $nombreProducto, $precio, $imagen, $usuarioId); // Se toman parametros
+    $stmt->bind_param("sdss", $nombreProducto, $precio, $imagen, $usuarioId); // Se toman parametros
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
@@ -87,26 +86,54 @@ function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) 
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
-function actualizarProducto($productoId, $nombreProducto, $precio, $imagen = null) // Función para actualizar los productos
+function actualizarProducto($productoId, $nombreProducto, $precio, $imagen) 
 {
     global $conn; // Conexión
     $sql = "UPDATE productos SET nombre = ?, precio = ?";
-    if($imagen) {
+    if ($imagen) {
         $sql .= ", imagen = ?";
     }
     $sql .= " WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    if($imagen) {
-        $stmt->bind_param("sdss", $nombreProducto, $precio, $imagen, $productoId);
+    if ($imagen) {
+        $stmt->bind_param("sdsi", $nombreProducto, $precio, $imagen, $productoId);
     } else {
         $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId);
     }
-    return $stmt->execute(); // Se ejecuta la consulta
+    return $stmt->execute(); 
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la petición es POST
-    $data = json_decode(file_get_contents("php://input"), true); // Obtiene los datos de la petición
+if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
+    if (isset($_POST['accion']) && $_POST['accion'] === 'subir_imagen' && isset($_FILES['imagen'])) {
+        $targetDir = __DIR__ . "/imagenes/";
+        if (!is_dir($targetDir)) {
+            if (!mkdir($targetDir, 0777, true)) {
+                echo json_encode(['status' => 'error', 'message' => 'No se pudo crear el directorio de imágenes']);
+                exit;
+            }
+        }
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $fileType = mime_content_type($_FILES['imagen']['tmp_name']);
+        if (!in_array($fileType, $allowedTypes)) {
+            echo json_encode(['status' => 'error', 'message' => 'Tipo de archivo no permitido']);
+            exit;
+        }
+        $fileName = uniqid() . '_' . basename($_FILES['imagen']['name']);
+        $targetFile = $targetDir . $fileName;
+        $baseUrl = "http://" . $_SERVER['HTTP_HOST']; 
+        $relativePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $targetDir); 
+        $publicUrl = $baseUrl . $relativePath . $fileName;
+        if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK && move_uploaded_file($_FILES['imagen']['tmp_name'], $targetFile)) {
+            echo json_encode(['status' => 'success', 'message' => 'Imagen subida con éxito', 'url' => $publicUrl]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Error al subir la imagen']);
+        }
+        exit;
+    }
+
+
+    $data = json_decode(file_get_contents("php://input"), true); //---> Validación para obtener JSON
     if (isset($data['accion'])) { // Verificación de si hay una acción
         switch ($data['accion']) { // Switch para manejar las acciones por casos
             case 'crear_usuario': // Caso 1 para crear un usuario
@@ -136,7 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
 
             case 'crear_producto': // Caso 3 para crear el producto
                 if (isset($_SESSION['usuario_id'], $data['nombre_producto'], $data['precio'])) { // Verifica los datos del producto y el usuario id que lo creo
-                    if (crearProducto($data['nombre_producto'], $data['precio'], $data['imagen'])) { // Verifica si se crea el producto
+                    $imagen = $data['imagen'] ?? null; 
+                    if (crearProducto($data['nombre_producto'], $data['precio'], $imagen)) { // Verifica si se crea el producto
                         echo json_encode(['status' => 'success', 'message' => 'Producto creado con éxito']); // Mensaje de éxito al crear un producto
                     } else { // En caso no de crearse el producto
                         echo json_encode(['status' => 'error', 'message' => 'Error al crear el producto']); // Mensaje de error que indica que hubo error al crear el producto
@@ -145,25 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verificación del método de la 
                     echo json_encode(['status' => 'error', 'message' => 'Debes iniciar sesión o datos incompletos']); // Mensaje de error de primero iniciar sesión o poner datos correctos
                 }
                 break; // Fin del caso y sale
-
-            case 'subir_imagen':
-                if ($_FILES['imagen'] && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = 'imagenes/';
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0777, true);
-                    }
-                    $fileName = uniqid() . '_' . basename($_FILES['imagen']['name']);
-                    $filePath = $uploadDir . $fileName;
-
-                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filePath)) {
-                        echo json_encode(['status' => 'success', 'message' => 'La imagen fue subida con éxito', 'url' => $filePath]);
-                    } else {
-                        echo json_encode(['status' => 'error', 'message' => 'Ocurrio un error al cambiar la imagen']);
-                    }
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Ocurrrio un error al subir la imagen']);
-                }
-                break;
 
             case 'eliminar_usuario': // Caso 4 para eliminar el usuario
                 if ($_SESSION['usuario_rol'] === 'admin' && isset($data['usuario_id'])) { // Verifica si el usuario es admin y si se usa el id del usuario a eliminar
