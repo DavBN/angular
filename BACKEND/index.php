@@ -86,48 +86,48 @@ function actualizarUsuario($usuarioId, $nombre, $email, $rol, $password = null) 
     return $stmt->execute(); // Se ejecuta la consulta
 }
 
-function actualizarProducto($productoId, $nombreProducto, $precio, $imagen) 
+function actualizarProducto($productoId, $nombreProducto, $precio, $imagen) //---> Función para actualizar los productos
 {
     global $conn; // Conexión
-    $sql = "UPDATE productos SET nombre = ?, precio = ?";
-    if ($imagen) {
-        $sql .= ", imagen = ?";
+    $sql = "UPDATE productos SET nombre = ?, precio = ?"; //---> Consulta SQL
+    if ($imagen) { //---> Valida que hay una imagen
+        $sql .= ", imagen = ?"; //---> Se agrega la imagen a la consulta
     }
-    $sql .= " WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($imagen) {
-        $stmt->bind_param("sdsi", $nombreProducto, $precio, $imagen, $productoId);
-    } else {
-        $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId);
+    $sql .= " WHERE id = ?"; //---> Se agrega el id a la consulta
+    $stmt = $conn->prepare($sql); //---> Se prepara la consulta
+    if ($imagen) { //---> Se vuelve a validar si hay una imagen
+        $stmt->bind_param("sdsi", $nombreProducto, $precio, $imagen, $productoId); //---> Se toman los parametros
+    } else { //---> Si no hay una imagen se ejecuta sin imagen
+        $stmt->bind_param("sdi", $nombreProducto, $precio, $productoId); //---> Se toman los parametros
     }
-    return $stmt->execute(); 
+    return $stmt->execute(); //---> Se ejecuta la consulta
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
-    if (isset($_POST['accion']) && $_POST['accion'] === 'subir_imagen' && isset($_FILES['imagen'])) {
-        $targetDir = __DIR__ . "/imagenes/";
-        if (!is_dir($targetDir)) {
-            if (!mkdir($targetDir, 0777, true)) {
-                echo json_encode(['status' => 'error', 'message' => 'No se pudo crear el directorio de imágenes']);
-                exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación del método que sea petición POST
+    if (isset($_POST['accion']) && $_POST['accion'] === 'subir_imagen' && isset($_FILES['imagen'])) { //---> Verifica si existe una acción y esa acción es subir imagen y cuenta con un archivo tipo FILE
+        $targetDir = __DIR__ . "/imagenes/"; //---> Carpeta dónde se guardarán las imagenes
+        if (!is_dir($targetDir)) { //---> Verifica si la carpeta existe
+            if (!mkdir($targetDir, 0777, true)) { //---> En caso no de no existir la carpeta, la crea
+                echo json_encode(['status' => 'error', 'message' => 'No se pudo crear el directorio de imágenes']); //---> Mensaje de error en cao no poder crear la carpeta
+                exit; //---> Fin del script
             }
         }
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $fileType = mime_content_type($_FILES['imagen']['tmp_name']);
-        if (!in_array($fileType, $allowedTypes)) {
-            echo json_encode(['status' => 'error', 'message' => 'Tipo de archivo no permitido']);
-            exit;
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']; //---> Tipos de archivos o imagenes permitidas
+        $fileType = mime_content_type($_FILES['imagen']['tmp_name']); //---> El tipo de archivo que se espera se suba
+        if (!in_array($fileType, $allowedTypes)) { //---> Verifica si el tipo de archivo es permitido
+            echo json_encode(['status' => 'error', 'message' => 'Tipo de archivo no permitido']); //---> Mensaje de error en caso de subir un archivo en formato no permitido
+            exit; //---> Fin del script
         }
-        $fileName = uniqid() . '_' . basename($_FILES['imagen']['name']);
-        $targetFile = $targetDir . $fileName;
-        $baseUrl = "http://" . $_SERVER['HTTP_HOST']; 
-        $relativePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $targetDir); 
-        $publicUrl = $baseUrl . $relativePath . $fileName;
-        if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK && move_uploaded_file($_FILES['imagen']['tmp_name'], $targetFile)) {
-            echo json_encode(['status' => 'success', 'message' => 'Imagen subida con éxito', 'url' => $publicUrl]);
+        $fileName = uniqid() . '_' . basename($_FILES['imagen']['name']); //---> Nombre del archivo 
+        $targetFile = $targetDir . $fileName; //---> La ruta del archivo
+        $baseUrl = "http://" . $_SERVER['HTTP_HOST']; //---> Establece una url base
+        $relativePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $targetDir); //---> Ruta relativa establecida
+        $publicUrl = $baseUrl . $relativePath . $fileName; //---> Url pública de la imagen para usar
+        if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK && move_uploaded_file($_FILES['imagen']['tmp_name'], $targetFile)) { //---> Verifica si no existen errores al subir una imagen y se agrega a la carpeta
+            echo json_encode(['status' => 'success', 'message' => 'Imagen subida con éxito', 'url' => $publicUrl]); //---> Mensaje en caso de éxito al subir una imagen
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error al subir la imagen']);
+            echo json_encode(['status' => 'error', 'message' => 'Error al subir la imagen']); //---> Mensaje en caso de erro al no poder subir la imagen
         }
         exit;
     }
@@ -279,4 +279,3 @@ $conn->close(); // Cierre de la conexión
 exit; // Fin del script
 
 
-//INVESTIGANDO PARA CREAR LA FUNCIONALIDAD QUE PERMITIRA LA VISUALIZACIÓN DE IMAGENES EN LOS PRODUCTOS, COMO TAMBIÉN ACTUALIZARLA.
