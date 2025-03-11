@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación del método qu
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Error al subir la imagen']); //---> Mensaje en caso de erro al no poder subir la imagen
         }
-        exit;
+        exit; //--> Fin del script
     }
 
 
@@ -269,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación del método qu
                 break; // Fin del caso y sale
         }
     } else { // En caso de existir una acción
-        echo json_encode(['status' => 'Error', 'message' => 'No hay una acción especifica, por favor redireccione']); // Mensaje de error de no haber una acción
+        echo json_encode(['status' => 'Error', 'message' => 'No hay una acción o método especifico, por favor redireccione']); // Mensaje de error de no haber una acción
     }
 } else { // En caso de no ser un método ya sea post o get
     echo json_encode(['status' => 'Error', 'message' => 'No soportado']); // Mensaje de error de no soportado
