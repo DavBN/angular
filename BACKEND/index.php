@@ -1,6 +1,6 @@
 <?php
 //CORS
-header("Access-Control-Allow-Origin: http://localhost:4200"); //Angular
+header("Access-Control-Allow-Origin: *"); //Angular
 header("Access-Control-Allow-Credentials: true"); // Credenciales
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS"); //Accione
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); //Cabeceras
@@ -224,6 +224,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación del método qu
                 }
                 break; // Fin del caso y sale
 
+                case 'metodo_post_activado': 
+                    echo json_encode(['status' => 'success', 'message' => 'metodo post activado'], JSON_PRETTY_PRINT);
+                    break;
+
             case 'logout': // Caso 8 para cerrar la sesión
                 session_unset(); // Limpia la sesión del usuario
                 session_destroy(); // Destruye la sesión del usuario
@@ -253,6 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //---> Verificación del método qu
                     echo json_encode(['status' => 'error', 'message' => 'no tienes acceso']); // Mensaje de error no tiene el acceso
                 }
                 break; // Fin del caso y sale
+
+                case 'metodo_get_activado': 
+                    echo json_encode(['status' => 'success', 'message' => 'metodo get activado'], JSON_PRETTY_PRINT);
+                    break;
 
             case 'listar_productos': // Caso 2 para listar los productos
                 $sql = "SELECT * FROM productos"; // Consulta SQL
