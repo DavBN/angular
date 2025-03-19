@@ -1,0 +1,91 @@
+<div class="tabs"> <!-- Clase tabs para navegación padre -->
+    <div *ngIf="selectedTab === 1"> <!-- Div que contiene el primer tab que muestra los productos-->
+      <app-productos></app-productos> <!-- Componente productos -->
+    </div> <!-- Cierre div tab -->
+    <ul class="tab-titles"> <!-- Ul para la selcción de navegación entre productos y usuarios -->
+        <li [class.active]="selectedTab === 1" (click)="selectTab(1)">Gestión de productos -- ADMIN</li> <!-- Botón que redirecciona a productos -->
+        <li [class.active]="selectedTab === 2" (click)="selectTab(2)">Gestión de usuarios -- ADMIN</li> <!-- Botón que redirecciona a usuarios -->
+      </ul> <!-- Cierre del ul -->
+    <div *ngIf="selectedTab === 2"> <!-- Div que contiene la gestión de usuarios y pertenece al tab 2-->
+      <div class="container"> <!-- Contenedor -->
+        <h2>Gestión de usuarios ADMIN</h2> <!-- Título -->
+        <div class="mb-4"> <!-- Div con clase para estilos -->
+          <div class="mb-4"> <!-- Div con clase para estilos -->
+            <h5>Crear usuario</h5> <!-- Título para la sección -->
+            <form (ngSubmit)="crearUsuario()"> <!-- Formulario con validación de crear un usuario -->
+              <div class="form-group"> <!-- Div que agrupa los campos en dónde se ingresa la información para crear el usuario -->
+                <label class="small">Nombre usuario</label> <!-- Título del campo -->
+                <input type="text" class="form-control" [(ngModel)]="nuevoUsuario.nombre" name="nombre" required /> <!-- Campo dónde se ingresa el nombre del usuario -->
+              </div> <!-- Cierre del div nombre -->
+              <div class="form-group"> <!-- Div que agrupa los campos en dónde se ingresa la información para crear el usuario -->
+                <label class="small">Correo</label> <!-- Título del campo -->
+                <input type="email" class="form-control" [(ngModel)]="nuevoUsuario.email" name="email" required /> <!-- Campo dónde se ingresa el correo del usuario -->
+              </div> <!-- Cierre del div correo -->
+              <div class="form-group"> <!-- Div que agrupa los campos en dónde se ingresa la información para crear el usuario -->
+                <label class="small">Rol</label> <!-- Título del campo -->
+                <select class="form-control" [(ngModel)]="nuevoUsuario.rol" name="rol" required> <!-- Campo dónde se ingresa el correo del usuario -->
+                  <option value="admin">Administrador</option> <!-- Campo donde se selecciona el rol del usuario -->
+                  <option value="usuario">Usuario</option> <!-- Campo donde se selecciona el rol del usuario -->
+                </select> <!-- Cierre del seleccionador -->
+              </div> <!-- Cierre del div rol -->
+              <div class="form-group"> <!-- Div que agrupa los campos en dónde se ingresa la información para crear el usuario -->
+                <label class="small">Contraseña</label> <!-- Título del campo -->
+                <input type="password" class="form-control" [(ngModel)]="nuevoUsuario.password" name="password" required /> <!-- Campo dónde se ingresa la contraseña del usuario -->
+              </div><!-- Cierre del div contraseña -->
+              <button type="submit" class="btn btn-success">Crear usuario</button> <!-- Botón para el envío de la creación de usuario -->
+            </form><!-- Cierre del formulario -->
+          </div><!-- Cierre del div -->
+        </div><!-- Cierre del div -->
+        <table class="table table-bordered"><!-- Tabla con clases -->
+          <thead> <!-- Contenido de la tabla en celdas -->
+            <tr> <!-- Tr para conteneder dónde se muestran los usuarios -->
+              <th>Id</th> <!-- Id del usuario -->
+              <th>Nombre</th> <!-- Nombre del usuario -->
+              <th>Correo</th> <!-- Correo del usuario -->
+              <th>Rol</th> <!-- Rol del usuario -->
+              <th>Acción</th> <!-- Acción del usuario -->
+            </tr> <!-- Cierre tr -->
+          </thead> <!-- Cierre del thead -->
+          <tbody> <!-- Contenido que se mostrara validando los valores -->
+            <tr *ngFor="let usuario of usuarios"> <!-- Validación -->
+              <td>{{ usuario.id }}</td> <!-- Id del usuario -->
+              <td>{{ usuario.nombre }}</td> <!-- Nombre del usuario -->
+              <td>{{ usuario.email }}</td> <!-- Correo del usuario -->
+              <td>{{ usuario.rol }}</td> <!-- Rol del usuario -->
+              <td> <!-- Cierre td -->
+                <button class="btn btn-info editar" (click)="seleccionarUsuario(usuario)">Editar usuario</button> <!-- Botón para editar usuario -->
+                <button class="btn btn-danger eliminar" (click)="eliminarUsuario(usuario.id)">Eliminar usuario</button> <!-- Botón para eliminar usuario -->
+              </td> <!-- Cierre td -->
+            </tr> <!-- Cierre tr -->
+          </tbody> <!-- Cierre tbody -->
+        </table> <!-- Cierre de la tabla -->
+        <div *ngIf="usuarioSeleccionado" class="form-container"> <!-- Div con validación que despliega el contenido del usuario para ser actualizado -->
+          <div class="form-group"> <!-- Div con clase de form -->
+            <h5>Actualizar usuario</h5> <!-- Título -->
+            <form (ngSubmit)="actualizarUsuario()"> <!-- Envío a la función de actualizar usuario -->
+              <div class="form-group"> <!-- Div con clase de form -->
+                <label>Nombre</label> <!-- Título del campo -->
+                <input type="text" class="form-control" [(ngModel)]="usuarioSeleccionado.nombre" name="editNombre" required /> <!-- Campo dónde se ingresa el nombre nuevo del usuario -->
+              </div><!-- Cierre div -->
+              <div class="form-group"> <!-- Div con clase de form -->
+                <label>Correo</label> <!-- Título del campo -->
+                <input type="email" class="form-control" [(ngModel)]="usuarioSeleccionado.email" name="editEmail" required /> <!-- Campo dónde se ingresa el correo nuevo del usuario -->
+              </div> <!-- Cierre div -->
+              <div class="form-group"> <!-- Div con clase de form -->
+                <label>Rol</label> <!-- Título del campo -->
+                <select class="form-control" [(ngModel)]="usuarioSeleccionado.rol" name="editRol" required>  <!-- Campo dónde se ingresa el rol nuevo del usuario -->
+                  <option value="admin">Administrador</option>  <!-- Opciones para seleccionar el rol -->
+                  <option value="usuario">Usuario</option>  <!-- Opciones para seleccionar el rol -->
+                </select>  <!-- Cierrre del select -->
+              </div> <!-- Cierrre del div -->
+              <button type="submit" class="btn btn-success">Actualizar usuario</button> <!-- Botón para enviar el nuevo usuario actualizado -->
+              <button type="button" class="btn btn-danger" (click)="usuarioSeleccionado = null">Cancelar</button> <!-- Botón para cancelar la acción -->
+            </form> <!-- Cierre del formulario -->
+          </div> <!-- Cierrre del div -->
+        </div> <!-- Cierrre del div -->
+      </div> <!-- Cierrre del div -->
+    </div> <!-- Cierrre del div -->
+  </div> <!-- Cierrre del div -->
+
+
+  

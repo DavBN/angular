@@ -1,0 +1,12 @@
+<!DOCTYPE html> <!--Documento html del app principal o padre-->
+<html lang="en"> <!--Idioma-->
+<head> <!--Cabecera-->
+    <meta charset="UTF-8"> <!--Caracteres permitidos-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Controla como se muestra en otros dispositivos-->
+    <title>Document</title>  <!--Título-->
+</head> <!--Cierre cabecera-->
+<body> <!--Cuerpo-->
+    <router-outlet></router-outlet> <!--Permite la navegación en las rutas sin incorporar los componentes en el app padre-->
+    <app-footer *ngIf="footer"></app-footer> <!--Componente del footer con validación para no ser mostrado en el componente de inicio de sesión-->
+    </body> <!--Cierre cuerpo-->
+</html> <!--Cierre html-->

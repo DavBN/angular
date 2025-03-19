@@ -1,0 +1,31 @@
+<div class="login-container"> <!-- Contenedor del login -->
+    <div class="login-form"> <!-- Formulario del login -->
+        <h2>Bienvenido al inicio de sesión</h2> <!-- Título para mostrar encima del input -->
+        <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()"> <!-- Validación de la función para iniciar sesión -->
+            <div class="form-group"> <!-- Formulario -->
+                <label>Correo electrónico</label> <!-- Título -->
+                <input type="text" formControlName="email" /> <!-- El tipo del campo -->
+                <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" style="color: red;"> <!-- Validación de credenciales o en caso de error -->
+                    <i class="fas fa-exclamation-circle"></i> El correo es obligatorio <!-- Alerta de error -->
+                </div> <!-- Cierre del div de validación -->
+            </div> <!-- Cierre div  -->
+            <div class="form-group"> <!-- Div para otro campo -->
+                <label>Contraseña</label>  <!-- Título -->
+                <input type="password" formControlName="password" /> <!-- El tipo del campo -->
+                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+                    style="color: red;"> <!-- Validación de credenciales o en caso de error -->
+                    <i class="fas fa-exclamation-circle"></i> La contraseña es obligatoria <!-- Alerta de error -->
+                </div> <!-- Cierre del div de validación -->
+            </div> <!-- Cierre div  -->
+            <div *ngIf="errorMessage" style="color: red;"> <!-- Color del error del mensaje  -->
+                <i class="fas fa-exclamation-circle"></i> {{ errorMessage }} <!-- Mostrar en el error un signo de exclamación  -->
+            </div> <!-- Cierre div  -->
+            <button type="submit">Iniciar Sesión</button> <!-- Botón de enviar  -->
+        </form> <!-- Cierre formulario  -->
+    </div> <!-- Cierre div  -->
+    <div class="login-video"> <!-- Div que contiene el video  -->
+        <video autoplay muted loop> <!-- Función para que el video se reproduzca solo y en modo infinito  -->
+            <source src="assets/video.mp4" type="video/mp4"> <!-- Ubicación del video  -->
+        </video> <!-- Cierre video  -->
+    </div> <!-- Cierre div  -->
+</div> <!-- Cierre div  -->

@@ -1,0 +1,30 @@
+.footer { /* Esitlos del componente footer */
+    width: 100%; /* Ocupación de todo el ancho de pantalla */
+    background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0)); /* Color del footer en gradiante conteniendo 3 colores */
+    color: white; /* Color blanco para el texto de fondo */
+    padding: 20px 0; /* Se aplica espaciado entre el superior y inferior de 20px  */
+    text-align: center; /* Texto alienado al centro */
+    font-size: 0.875rem; /* Tamaño de texto establecido en 0.875rem */
+    margin-top: 0; /* Se aplica que no tenga margen superior */
+    box-sizing: border-box; /* Incluye un padding y un border calculando las dimensiones */
+}
+
+.footer .container { /* Contenedor con ancho máximo para lo que va dentro del footer */
+    max-width: 1200px; /* Tamaño de ancho máximo del contenedor */
+    margin: 0 auto; /* Aquí se centra el contenedor horizontalmente */
+    padding: 0 15px; /* Se aplica un espacido interno de forma lateral */
+}
+
+.footer p { /* Parrafos dentro del footer */
+    margin: 0; /* No se aplican márgenes para que el diseño esté compacto */
+}
+
+@media (max-width: 768px) { /* Media querys para las pantallas más pequeñas */
+    .footer { /* Clase del footer */
+        font-size: 0.75rem; /* Tamaño de texto se establece en 0.75rem */
+    }
+
+    .footer .container { /* Contenedor del footer */
+        padding: 0 10px; /* Reduce el espacio interno lateral aplicado antes */
+    }
+}

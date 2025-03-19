@@ -1,0 +1,142 @@
+html, /*Configuración del alto del html y body de la página*/
+body {
+    height: 100%; /*Se aplica el total*/
+    margin: 0; /*Elimina los márgenes prederterminados*/
+    padding: 0; /*Elimina el padding prederterminado*/
+}
+
+.login-container { /*Contenedor del login*/
+    display: flex; /*Disponine una línea flexible*/
+    height: 100vh; /*Aplica un alto del 100% igual*/
+    width: 100%; /*Ancho completo de pantalla*/
+    overflow: hidden; /*Aplica un ocultamiento de un tipo desborde*/
+}
+
+.login-form { /*Formulario de login*/
+    flex: 1; /*Ocupa un espacio igual*/
+    display: flex; /*Se usa flexbox para la disposición interna del contenedor*/
+    flex-direction: column; /*Hace que los elementos estén en columna*/
+    justify-content: center; /*Hace que los elementos se alineen en forma vertical*/
+    align-items: center; /*Se centran los elementos en forma horizontal*/
+    padding: 20px; /*Aplica un espaciado interno de 20px*/
+    background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0)); /*Se aplica un color en gradiante, compuesto por 3 colores*/
+
+}
+
+.login-form h2 { /*Encabezado del formulario*/
+    font-size: 2rem; /*Se aplica un tamaño de fuente de 2rem*/
+    margin-bottom: 20px; /*Se aplica un espaciado inferior*/
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; /*Estilo de la tipografía usada en el formulario*/
+    color: white; /*Se aplica un color blanco para los textos*/
+}
+
+.form-group { /*Estilos del grupo del formulario*/
+    margin-bottom: 15px; /*Se aplica un espaciado interno de 15px*/
+    width: 100%; /*Ancho completo, ósea el 100%*/
+    max-width: 400px; /*Se aplica un ancho máximo para mayor visualización*/
+    display: flex; /*Se usa flexbox */
+    flex-direction: column; /*Hace que los elementos tengan linea en columna*/
+    align-items: center; /*Hace que los elementos se alineen horizontalmente*/
+    justify-content: center; /*Hace que el contenidor se centre verticalmente*/
+} 
+
+label { /*Estilo de la etiqueta*/
+    font-size: 1.1rem; /*Se aplica un tamaño de fuente de 1.1rem*/
+    font-weight: bold; /*Hace que el texto este en negrita*/
+    color: white; /*Se aplica un color blanco para el texto*/
+    text-align: center; /*Hace que el texto se centre*/
+    margin-bottom: 8px; /*Aplica un espaciado inferior*/
+    width: 100%; /*Hace que tome todo el ancho completo*/
+}
+
+input[type="text"], /*Estilos para los campos*/
+input[type="password"] { /*Estilos para los campos*/
+    width: 100%; /*Hace que tome todo el ancho completo*/
+    padding: 10px; /*Aplica un espaciado interno*/
+    margin-top: 5px; /*Aplica un espaciado en la parte superior*/
+    border-radius: 5px; /*Hace que los bordes sean redondos*/
+    border: 1px solid #000000; /*Aplica un borde negro alrededor*/
+    font-size: 1rem; /*Tamaño de la fuente establecido en 1rem*/
+}
+
+input[type="text"].ng-touched.ng-invalid, /*Resalta el campo al tocarse, esto viene de angular*/
+input[type="passwor"].ng-touched.ng-invalid { /*Resalta el campo al tocarse, esto viene de angular*/
+    border-color: #d9534f;  /*Color rojo para tipo alerta*/
+}
+
+.form-group div { /*Estilos adicionales*/
+    font-size: 0.9rem; /*Tamaño de la fuente establecido en 0.9rem*/
+    margin-top: 5px; /*Se aplica un espaciado superior*/
+}
+ 
+button { /*Estilos para los botones*/
+    padding: 10px 20px; /*Se aplica un espaciado interno*/
+    background-color: #000000; /*Color de fondo establecido en negro*/
+    color: white; /*Color del texto establecido en blanco*/
+    border: none; /*Se aplica un sin bordes*/
+    border-radius: 5px; /*Hace que lo que tenga bordes sea de forma redonda*/
+    cursor: pointer; /*Hace que cuándo se pase por el botón aparezca una mano*/
+    font-size: 1rem; /*Tamaño de texto establecido en 1rem*/
+    width: 100%; /*Hace que tome todo el ancho disponible*/
+    max-width: 400px; /*Aplica un ancho máximo de 400px*/
+    margin-top: 15px; /*Se aplica un espaciado superior de 15px*/
+}
+
+.login-video { /*Contenedor dónde está el video*/
+    flex: 1; /*Hace que ocupe el espacio igual*/
+    position: relative; /*Posiciona los elementos en relativo */
+    height: 100%; /*Se aplica un alto completo*/
+}
+
+.login-video video { /*Estilos al video*/
+    position: absolute; /*Hace que se posicione dentro del contenedor de forma absoluta*/
+    top: 0; /*Hace que se posicione en la parte superior*/
+    left: 0; /*Hace que se posicione en la parte izquierda*/
+    width: 100%; /*Hace que tome todo el ancho disponible*/
+    height: 100%; /*Hace que tome todo el alto disponible*/
+    object-fit: cover; /*Hace un escalado del video para poder cubrir el contenedor*/
+}
+
+.error-message { /*Estilos a los mensajes de error*/
+    color: #d9534f; /*Color de texto en rojo*/
+    background-color: rgba(217, 53, 78, 0.1); /*Se aplica un fondo que es semitransparente*/
+    border: 1px solid #d9534f; /*Se aplica un borde en color rojo*/
+    padding: 10px; /*Se aplica un espacido interno*/
+    border-radius: 5px; /*Hace que los bordes sean redondos en las puntas*/
+    font-size: 0.9rem; /*Tamaño de la fuente establecido en 0.9rem*/
+    display: flex; /*Posiciona en línea flexible*/
+    align-items: center; /*Hace que el contenidor se alinee de forma vertical*/
+    margin-top: 5px; /*Aplica un espaciado superior*/
+    width: 100%; /*Hace que tome todo el ancho disponible*/
+    max-width: 400px; /*Se aplica un ancho máximo de 400px*/
+    animation: fadeIn 0.3 ease-in-out; /*Se aplica una animación*/
+}
+
+.error-message i { /*Estilos para el icono dentro del mensaje*/
+    margin-right: 10px; /*Se aplica un espaciado hacía la derecha de 10px*/
+    font-size: 1.5rem; /*Tamaño de fuente establecido en 1.5rem*/
+} 
+
+@keyframes fadeIn { /*Animación para el mensaje que aparece de error*/
+    from { /*Desde dónde*/
+        opacity: 0; /*Comienza de forma invisible*/
+    }
+    to { /*Hacia*/
+        opacity: 1; /*Termina de forma totalmente visible*/
+    }
+}
+
+@media(max-width: 768px) { /*Estilos para los media querys de pantallas pequeñas*/
+    .login-container { /*Contenedor de login*/
+        flex-direction: column; /*Cambia la dirección de forma vertical*/
+    }
+
+    .login-form { /*Formulario de login*/
+        width: 100%; /*Hace que tome todo el ancho disponible*/
+        max-width: none; /*Elimina el ancho máximo*/
+    }
+
+    .login-video { /*Parte del video*/
+        height: 50vh; /*Se reduce el alto del video*/
+    }
+}

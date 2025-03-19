@@ -1,0 +1,475 @@
+.container {
+    /**Contenedor principal **/
+    top: 0;
+    /** Define la posición superior en 0 **/
+    max-width: 800px;
+    /** Limita el ancho máximo del contenedor en 800px **/
+    width: 100%;
+    /** Se asegura que el contenedor ocupe el 100% del ancho disponible dentro del container **/
+    margin: 20px auto;
+    /** Añade un margen de 20px arriba y abajo y centra el contenido horizontalmente**/
+    padding: 20px;
+    /** Esto agrega un espacio interno de 20px en todos los lados **/
+    border-radius: 8px;
+    /** Da esquinas redondas en el contenedor con un radio de 8px **/
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /** Aplica una sombra, efecto visual **/
+    background-color: #fff;
+    /** Color blanco para el fondo del contenedor **/
+    align-items: center;
+    /** Alinea los elementos hijos dentro del contenedor al centro **/
+    text-align: center;
+    /** Se centra el texto horizontalmente dentro del contenedor **/
+}
+
+h2 {
+    /** Titulos **/
+    font-size: 2rem;
+    /** Tamaño de la fuente establecido en 2rem **/
+    color: #333;
+    /** Color gris oscuro para el texto de h2 **/
+    margin-bottom: 20px;
+    /** Añade un margen de 20px que está debajo del h2 - separación **/
+}
+
+h5 {
+    /** Subtitulo **/
+    font-size: 1.25rem;
+    /** Tamaño de la fuente establecido en 1.25rem **/
+    color: #444;
+    /** Color gris claro para el texto de h5 **/
+    margin-bottom: 15px;
+    /** Añade un margen de 15px que está debajo del h2 - separación **/
+}
+
+form {
+    /** Etiqueta del formulario **/
+    margin-bottom: 30px;
+    /** Margen de 30px inferior debajo del formulario **/
+}
+
+.small {
+    /** Subtitulos pequeños **/
+    font-size: 0.875rem;
+    /** Tamaño de la fuente establecido en 0.875rem **/
+    font-weight: 500;
+    /** Se aplica una especie de peso en la fuente para hacerla más gruesa **/
+    color: #555;
+    /** Color gris claro para el texto  **/
+}
+
+.form-control {
+    /** Clase del formulario **/
+    width: 100%;
+    /** Se asegura que el elmento ocupe todo el ancho del contenedor **/
+    padding: 10px;
+    /** Se añade un espacio interno de 10px en toda dirección del contenedor **/
+    border: 1px solid #ddd;
+    /** Se aplica un borde de color gris claro en el borde del contenedor **/
+    border-radius: 8px;
+    /** Aplica esquinas redondas con un radio de 8px **/
+    font-size: 1rem;
+    /** Tamaño de la fuente establecido en 1rem **/
+    margin-bottom: 10px;
+    /** Se aplica un margen inferior de 10px para separación de elementos **/
+}
+
+button[type="submit"],
+/** Botones **/
+button[type="button"] {
+    /** Botones **/
+    padding: 10px 20px;
+    /** Se aplica un relleno interno de 10px arriba y abajo y 20px a los lados **/
+    font-size: 1rem;
+    /** Tamaño de la fuente establecido en 1rem **/
+    cursor: pointer;
+    /** Aplica un cambio en cursor a una mano para tipo selección **/
+    border: none;
+    /** Elimina el borde que tiene predeterminado el botón **/
+    border-radius: 5px;
+    /** Aplica un redondeo en las esquinas del botón **/
+    margin-top: 10px;
+    /** Se aplica un margen superior de 10px para separar el botón **/
+    transition: background-color 0.3 ease;
+    /** Aplica una animación pequeña al pasar el click por el botón **/
+    margin-top: 10px;
+    /** Se aplica un margen superior de 10px para separar el botón **/
+
+}
+
+button[type="submit"]:hover,
+/** Botones **/
+button[type="button"]:hover {
+    /** Botones **/
+    opacity: 0.8;
+    /** Aplica una reducción de la opacidad del botón **/
+}
+
+button[type="submit"] {
+    /** Botones **/
+    background-color: #28a745;
+    /** Aplica un color verde al botón que envía información **/
+    color: white;
+    /** Color del texto en blanco para el contraste **/
+}
+
+button[type="button"] {
+    /** Botones **/
+    background-color: #f44336;
+    /** Aplica un color rojo al botón de eliminar o editar  **/
+    color: white;
+    /** Color de texto en blanco para el contraste **/
+}
+
+button[type="submit"].editar {
+    /** Botones **/
+    background-color: #17a2b8;
+    /** Se cambia el color del botón editar a un azul al pasar por encima de él **/
+}
+
+button[type="button"].eliminar {
+    /** Botones **/
+    background-color: #dc3545;
+    /** Se aplica un color rojo al botón que elimina usuarios o productos en admin **/
+}
+
+table {
+    /** Tabla **/
+    width: 100%;
+    /** Asegura que la tabla ocupe todo el ancho del contenedor padre **/
+    border-collapse: collapse;
+    /** Elimina los espacios entre los bordes de las celdas **/
+    margin-top: 20px;
+    /** Aplica un margen súperior de 20px para separación **/
+}
+
+table th,
+/** Tabla con campos **/
+table td {
+    /** Tabla con campos **/
+    padding: 12px;
+    /** Aplica un relleno interno de 12px en todas las celdas **/
+    text-align: left;
+    /** Alinea el texto a la izquierda en las celdas **/
+    border: 1px solid #ddd;
+    /** Aplica un borde gris a todas las celdas de la tabla **/
+}
+
+table th {
+    /** Tabla con campos **/
+    background-color: #f4f4f4;
+    /** Aplica un color gris tipo fondo para el encabezado de la misma **/
+    color: #333;
+    /** Se aplica el color negro para el texto y contraste **/
+    font-weight: bold;
+    /** Aplica un grosor en los textos de los encabezados **/
+    text-align: center;
+    /** Alinea el texto al centro de las celdas **/
+}
+
+table td {
+    /** Tabla con campos **/
+    background-color: #fff;
+    /** Aplica color blanco al fondo de las celdas **/
+    color: #333;
+    /** Aplica el color negro para mantener los colores ya establecidos **/
+}
+
+table tr:nth-child(even) td {
+    /** Tabla con evento **/
+    background-color: #f9f9f9;
+    /** Aplica un color gris claro en las filas que son pares **/
+}
+
+table button {
+    /** Tabla con botón **/
+    padding: 8px 16px;
+    /** Aplica un relleno interno de 8px en vertical **/
+    border-radius: 5px;
+    /** Aplica un borde redondo en las esquinas del botón **/
+    font-size: 0.9rem;
+    /** Aplica una reducción del tamaño de la fuente en 0.9rem **/
+    margin-right: 10px;
+    /** Aplica un margen derecho de 10px para separar los botones **/
+    cursor: pointer;
+    /**  Cambia el cursor al pasar por encima de el **/
+    border: none;
+    /** Elimina el borde que tiene predeterminado **/
+    min-width: 100px;
+    /** Aplica un ancho mínimo de 100px para todos los botones **/
+    transition: background-color 0.3s ease;
+    /** Aplica una animación al cambiar el color del botón **/
+}
+
+
+button.editar {
+    /** Botón de editar **/
+    width: 100%;
+    /** Esto hace que el botón ocupe el 100% del ancho del contenedor **/
+    background-color: hsl(246, 87%, 28%);
+    /** Aplica un color específico en formato HSL **/
+    color: white;
+    /** Aplica color blanco al texto dentro del botón por temas de contraste **/
+}
+
+button.eliminar {
+    /** Botón de eliminar **/
+    width: 100%;
+    /** Esto hace que el botón ocupe el 100% del ancho del contenedor **/
+    background-color: #dc3545;
+    /** Aplica un color rojo al botón para eliminar usuarios o productos **/
+    color: white;
+    /** Aplica un color blanco al texto para el contraste **/
+}
+
+button.editar:hover {
+    /** Botón de editar al hacer hover **/
+    background-color: #218838;
+    /** Aplica un color verde al fondo del botón **/
+}
+
+button.eliminar:hover {
+    /** Botón de eliminar al hacer hover **/
+    background-color: #c82333;
+    /** Aplica un color rojo al fondo del botón **/
+}
+
+@media(max-width: 768px) {
+
+    /** Media query para responsividad **/
+    .container {
+        /** Contenedor principal  **/
+        padding: 15px;
+        /** Aplica una reducción del relleno interno del contenedor en las pantallas más pequeñas **/
+    }
+
+    h2 {
+        /** Texto **/
+        font-size: 1.75rem;
+        /** Aplica un tamaño al texto de 1.75rem **/
+    }
+
+    h5 {
+        /** Texto **/
+        font-size: 1.1rem;
+        /** Aplica un tamalo al texto de 1.1rem **/
+    }
+
+    .form-control {
+        /** Clase del formulario **/
+        padding: 8px;
+        /** Aplica una disminución del relleno interno en los campos del form **/
+        font-size: 0.9rem;
+        /** Se aplica una reducción del tamaño del texto en 0.9rem **/
+    }
+
+    table {
+        /** Tabla **/
+        font-size: 0.9rem;
+        /** Aplica un tamaño al texto de 0.9rem **/
+    }
+
+    table th,
+    /** Tabla **/
+    table td {
+        /** Tabla **/
+        padding: 10px;
+        /** Aplica un relleno de 10px para las celdas **/
+    }
+
+    button[type="submit"],
+    /** Botón **/
+    button[type="button"],
+    /** Botón **/
+    table button {
+        /** Botón y tabla **/
+        padding: 8px 15px;
+        /** Aplica un relleno interno de 8px en vertical y 15px en horizontal **/
+        font-size: 0.9rem;
+        /** Aplica un tamaño de texto en 0.9rem **/
+    }
+}
+
+@media (max-width: 768px) {
+
+    /**Media query para tamaños **/
+    .container {
+        /**Contenedor principal **/
+        padding: 15px;
+        /**Relleno de 15 pixeles **/
+    }
+
+    h2 {
+        /** Título h2 **/
+        font-size: 1.75rem;
+        /**Tamaño de letra ajustado para pantallas  **/
+    }
+
+    h5 {
+        /**Título h5 **/
+        font-size: 1.1rem;
+        /**Tamaño de letra ajustado para pantallas **/
+    }
+
+    .form-control {
+        /**Formulario **/
+        padding: 8px;
+        /** Relleno de / pixeles **/
+        font-size: 0.9rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    table {
+        /** Tabla de contenido **/
+        font-size: 0.9rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    table th,
+    /** Tabla y sección **/
+    table td {
+        /** Tabla y sección **/
+        padding: 10px;
+        /** Relleno de 10 pixeles **/
+    }
+
+    button[type="submit"],
+    /** Botón de envío **/
+    button[type="button"] {
+        /** Tipo de botón **/
+        padding: 8px 15px;
+        /** Relleno de 8 pixeles en vertical y 15 pixeles en horizontal **/
+        font-size: 0.9rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+}
+
+@media (max-width: 480px) {
+
+    /** Media query para móviles **/
+    .container {
+        /** Contenedor principal **/
+        padding: 10px;
+        /** Relleno de 10 pixeles **/
+    }
+
+    h2 {
+        /** Título h2 **/
+        font-size: 1.5rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    h5 {
+        /** Título h5**/
+        font-size: 1rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    .form-control {
+        /** Formulario **/
+        font-size: 0.85rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    table {
+        /** Tabla de contenido **/
+        font-size: 0.85rem;
+        /** Tamaño de letra ajustado para pantallas **/
+    }
+
+    table th,
+    /** Tabla y sección **/
+    table td {
+        /** Tabla y sección **/
+        padding: 8px;
+        /** Relleno de 8 pixeles **/
+        display: block;
+        /** Se muestra el contenido en bloque **/
+        width: 100%;
+        /** Asegura que el contenido ocupe todo el ancho **/
+    }
+
+    table th {
+        /** Tabla y sección **/
+        text-align: left;
+        /** Alinea el texto a la izquierda **/
+    }
+
+    button[type="submit"],
+    /** Botón de envío **/
+    button[type="button"] {
+        /** Tipo de botón **/
+        padding: 7px 14px;
+        /** Relleno de 7 pixeles en vertical y 14 pixeles en horizontal **/
+        font-size: 0.85rem;
+        /** Tamaño de letra ajustado para pantallas **/
+        width: 100%;
+        /** Asegura que el botón ocupe el ancho **/
+    }
+}
+
+.tabs {
+    /** Botones **/
+    display: flex;
+    /** Aplica flexbox para organizar los elementos dentro **/
+    flex-direction: column;
+    /** Organiza los elementos en una columna **/
+    flex-grow: 1;
+    /** Aplica un crecimiento del contendor para ocupar todo el espacio disponible **/
+    width: 100%;
+    /** Se asegura que tasb ocupe todo el ancho disponible **/
+    height: auto;
+    /** Ajusta la altura del contenedor **/
+    margin: 0;
+    /** Eliminar el margen que queda alrededor del contenedor **/
+    padding: 0;
+    /** Eliminar el padding por defecto **/
+    box-sizing: border-box;
+    /** Aplica inclución del padding y el borde en la misma dimensión **/
+}
+
+.tab-titles {
+    /** Títulos tabs **/
+    list-style-type: none;
+    /** Eliminar los puntos de lista **/
+    display: flex;
+    /** Se aplica flexbox para organizar los elementos **/
+    padding: 0;
+    /** Eliminar el padding por defecto en las listas **/
+    justify-content: center;
+    /** Centra todos los elementos dentro del contenedor **/
+}
+
+.tab-titles li {
+    /** Tabs títulos  **/
+    padding: 10px 20px;
+    /** Aplica un relleno de 10px arriba y abajo y 20px a la izquierda y derecha **/
+    cursor: pointer;
+    /** Cambia el cursosr al pasar por encima de él **/
+    background-color: #f1f1f1;
+    /** Aplica un color de fondo para cada elemento **/
+    margin-right: 10px;
+    /** Aplica un margen a la derecha para separación **/
+    border-radius: 5px;
+    /** Aplica un redondeado a las esquinas de los elementos **/
+}
+
+.tab-titles li.active {
+    /** Títulos tabs  **/
+    background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0));
+    /** Aplica color a los botones de tabs para navegación **/
+    color: white;
+    /** Aplica un color de texto para contraste **/
+}
+
+.tab-titles li:hover {
+    /** Hover a los tabs **/
+    background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0));
+    /** Aplica color a los botones de tabs para navegación **/
+}
+
+.tab-titles li.active:hover {
+    /** Hover a los tabs **/
+    background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0));
+    /** Aplica color a los botones de tabs para navegación **/
+}

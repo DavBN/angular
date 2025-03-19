@@ -1,0 +1,96 @@
+.header {  /* Header */
+  position: sticky;  /* Esto permite que el header este visible a medida que hago scroll en la página */
+  top: 0; /* Fijación del header el tope de arriba */
+  display: flex; /* Layout flexible para organizar los elementos del header */
+  justify-content: center; /* Aquí se centra horizontalmente los elementos */
+  align-items: center; /* Se alinea verticalmente los elementos */
+  padding: 10px 20px; /* Aplica un espaciado interno de 10px arriba y abajo y 20px a los lados */
+  background: linear-gradient(to right, rgb(255, 251, 0), rgb(4, 0, 255), rgb(255, 0, 0)); /* Color en gradiante del header en 3 colores */
+  color: white; /* Color del texto que va dentro del header */
+  width: 100%; /* Hace que el header ocupe todo el ancho de pantalla */
+  z-index: 1000; /* Esto asegura que el header quede encima de cualqueir elemento */
+  margin: 0; /* Elimina los márgenes que queden adicional */
+
+}
+
+.header-title { /* Estilos del título */
+  font-size: 24px; /* Tamaño del texto establecido en 24px */
+  margin: 0; /* No se aplican márgenes */
+  text-align: center; /* Texto alineado al centro en posición horizontal */
+}
+
+.header-nav { /* Contenedor tipo nav */
+  position: absolute; /* Esto permite posicionar el menú de forma absoluta */
+  right: 20px; /* Aquí se ubica el menú a 20px del borde derecho */
+  top: 50%; /* Centra el menú en forma horizontal */
+  transform: translateY(-50%); /* Esto ajusta el centrado en el eje Y */
+}
+
+.header-nav ul { /* Lista dentro del header */
+  list-style-type: none; /* Elimina los puntos que están prederteminados en el header */
+  margin: 0; /* Sin márgenes */
+  padding: 0; /* Sin relleno */
+  display: flex; /* Aquí se muestran los elementois de forma horizontal */
+}
+
+.header-nav li { /* Elementos de lista */
+  margin-left: 20px; /* Se aplica un margen a la izquierda para separar los elementos */
+}
+
+.header-nav a { /* Estilos de los enlaces */
+  color: white; /* Color del texto en blanco */
+  text-decoration: none; /* Elimina el subrayado del texto */
+  font-size: 18px; /* Tamaño del texto establecido en 18px */
+}
+
+.header-nav a:hover { /* Estilo del hover */
+  text-decoration: underline; /* Aquí se subraya el texto al pasar el ratón por el botón */
+}
+
+.logout-btn { /* Botón de cerrar sesión */
+  position: fixed; /* Posiciona el botón de manera fija para mostrarse al hacer scroll */
+  right: 50px; /* Aplica una distancia del borde derecho de la pantalla */
+  top: 100px; /* Aplica una distancia del border superior de la pantalla */
+  background-color: #ff4d4d; /* Color del botón en color rojo */
+  color: white; /* Color del texto dentro del botón */
+  border: none; /* Sin bordes */
+  padding: 10px 20px; /* Se aplica un espaciado interno */
+  font-size: 16px; /* Tamaño del texto establecido en 16px */
+  border-radius: 8px; /* Se aplican bordes redondos para mejor diseño */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Se aplica una sombra */
+  cursor: pointer; /* Aplica un cambio para que al pasar por botón se muestre un tipo mano */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Aplica una animación pequeña al hacer el hover */
+  z-index: 1001; /* Esto aseguria que este sobre otros elementos */
+}
+
+.logout-btn::before { /* Esto antes del botón */
+  content: ''; /* Elemento vacío */
+  position: absolute; /* Se posiciona la línea del botón  */
+  top: -50px; /* Aplica a la línea 50px por encima */
+  left: 50%; /* Centra la línea en forma horizontal */
+  transform: translateX(-50%); /* Se ajusta al centro exactamente */
+  width: 3px; /* Aplica un grosor a la línea de 3px */
+  height: 50px; /* Aplica una longitud a la línea */
+  background-color: #ff0000; /* Color de la línea en rojo */
+  z-index: -1; /* Esto hace que la línea quede atrás del botón */
+}
+
+.logout-btn:hover { /* Efecto del hover del botón */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Aplica una sombra un poco más incrementada por fuera del botón */
+}
+
+@media (max-width: 768px) { /* Media querys para pantallas pequeñas */
+  .logout-btn { /* Botón de cerrar sesión */
+    position: absolute; /* Posiciona a absoluto para dar mayor flexibilidad */
+    right: 10px; /* Aplica una reducción de distancia al borde derecho */
+    top: 0px; /* Aplica un ajuste del botón al borde derecho de pantalla */
+    padding: 6px 12px; /* Esto hace el botón más compacto  */
+    font-size: 12px; /* Tamaño de texto disminuye en dispositivo móvil */
+    z-index: 1001; /* Mantiene el botón encima de otros elementos */
+  }
+
+  .logout-btn::before { /* Botón antes */
+    top: -30px; /* Aplica un ajuste a la línea del botón haciendola más pequeña */
+    height: 30px; /* Reduce la longitud de la línea */
+  }
+}

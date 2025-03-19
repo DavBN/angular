@@ -1,0 +1,59 @@
+<app-home></app-home> <!-- Componente de home -->
+<div class="productos-container"> <!-- Contenedor principal -->
+  <h2>Gestión de Productos USUARIO</h2> <!-- Título -->
+
+  <form (ngSubmit)="productoEdit ? actualizarProducto() : crearProducto()">
+    <!-- Formulario para crear/actualizar productos -->
+
+    <div class="form-group">
+      <label for="nombre">Nombre del Producto:</label>
+      <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required placeholder="Nombre del producto"
+        class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="precio">Precio del producto:</label>
+      <input type="number" id="precio" [(ngModel)]="precio" name="precio" required placeholder="Precio del producto"
+        class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="imagen">Imagen del Producto:</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      {{ productoEdit ? 'Actualizar Producto' : 'Crear Producto' }}
+    </button>
+
+    <button *ngIf="productoEdit" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+      Cancelar
+    </button>
+  </form>
+
+  <!-- Tabla con la imagen al lado del nombre -->
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Imagen</th> <!-- Nueva columna para la imagen -->
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>
+          <img [src]="producto.imagen" alt="Imagen del Producto" class="product-image" />
+        </td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.precio | currency }}</td>
+        <td>
+          <button class="btn btn-warning" (click)="editarProducto(producto)">Editar</button>
+          <button *ngIf="esAdmin" class="btn btn-danger" (click)="eliminarProducto(producto.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

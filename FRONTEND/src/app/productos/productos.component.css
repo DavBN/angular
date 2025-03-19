@@ -1,0 +1,140 @@
+.productos-container { /* Contenedor de productos*/
+    max-width: 800px; /* Aplica un ancho máximo del contenedor*/
+    margin: 0 auto; /* Hace que el contenedor se centre horizontalmente*/
+    padding: 20px; /* Se aplica un espacio interno alrededor del contenidor*/
+    background-color: #f9f9f9; /* Se aplica un color blanco al fondo*/
+    border-radius: 10px; /* Aplica un borde redondo en las esquinas*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Se aplica un sombra al contenedor*/
+    overflow-y: auto; /* Se aplica un scroll vertical si la altura se excede*/
+}
+
+.productos-container h2 { /* Texto del container*/
+    text-align: center; /* Hace que el título este centrado horizontalmente*/
+    font-size: clamp(1.5rem, 3vw, 2rem); /* Tamaño de fuente establecido en 2rem*/
+    color: #333; /* Se aplica un color gris al texto*/
+    margin-bottom: 20px; /* Se aplica un espacio que va debajo del título*/
+}
+
+form { /* Formulario*/
+    margin-bottom: 30px; /* Aplica un espacio entre los grupos de los formularios*/
+}
+
+.form-group { /* Clase del formulario*/
+    margin-bottom: 15px; /* Aplica un espacio entre los grupos de los formularios*/
+}
+
+label { /* Etiqueta label*/
+    font-weight: bold; /* Hace que el texto este en negrita*/
+    display: block; /* Aplica que el label ocupe toda la línea disponible*/
+    margin-bottom: 5px; /* Se aplica un espacio debajo del label*/
+}
+
+input { /* Input del formulario*/
+    width: 100%; /* Hace que tome todo el ancho disponible*/
+    padding: 10px; /* Aplica un espacio interno al input*/
+    border-radius: 5px; /* Aplica esquinas redondas dentro del input*/
+    border: 1px solid #e0dbdb; /* Aplica un borde gris */
+    font-size: clamp(0.9rem, 2vw, 1rem); /* Tamaño de fuente establecido en 1rem*/
+    box-sizing: border-box;
+}
+
+input:focus { /* Input*/
+    outline: none; /* Hace que el borde que tiene por defecto el navegador se quite*/
+    border-color: #3498db; /* Color del borde cuándo se enfoca*/
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+button { /* Botón*/
+    padding: 10px 20px; /* Aplica un espacio interno al botón*/
+    border-radius: 5px; /* Hace que las esquinas sean redondas*/
+    font-size: clamp(0.9rem, 2vw, 1rem); /* Tamaño de la fuente establecido en 1rem*/
+    cursor: pointer; /* Hace que cuándo se pase por el botón aparezca una mano*/
+    border: none; /* Hace que se quite el borde del botón*/
+    transition: background-color 0.3; /* Aplica un cambio de color en la transición*/
+}
+
+button.btn-primary { /* Clase del botón*/
+    background-color: #28a745; /* Color del botón*/
+    color: white; /* Color del texto en blanco*/
+}
+
+button.btn-primary:hover{ /* Color al pasar por el botón*/
+    background-color: #0400ff; /* Color del botón al cambiar*/
+}
+
+button.btn-warning { /* Color en caso de warning*/
+    background-color: hsl(246, 87%, 28%); /* Color en azul a modo de advertencia*/
+    color: white; /* Color de texto en blanco*/
+}
+
+button.btn-danger { /* Color de peligro*/
+    background-color: #f10018; /* Color rojo en caso de peligro*/
+    color: white; /* Color de texto en blanco*/
+}
+
+button.btn-warning:hover{ /* Color al pasar por el botón*/
+    background-color: #218838; /* Color del botón*/
+}
+
+table { /* Tablas*/
+    width: 100%; /* Hace que la tabla ocupe todo el ancho*/
+    border-collapse: collapse; /* Hace que se quiten todos los bordes que estén dobles en la tabla*/
+    margin-top: 30px; /* Aplica un espacio encima de la tabla*/
+}
+
+table th, table td { /* Tabla y etiquetas*/
+    padding: 12px; /* Aplica un espacio interno en las celdas*/
+    text-align: center; /* Hace que el texto este alineeado de forma horizontal*/
+    font-size: clamp(0.8rem, 2vw, 1rem); /* Tamaño de fuente establecido en 1rem*/
+    border-bottom: 1px solid #ddd;
+}
+
+table td { /* Tabla td*/
+    background-color: #f8f9fa; /* Color blanco para las celdas*/
+    border-bottom: 1px solid #ddd; /* Aplica un borde inferior gris*/
+}
+
+table tr:hover td { /* Al hacer hover por la fila*/
+    background-color: #f1f1f1; /* Color blanco */
+}
+
+table, th, td { /* Alineación*/
+    text-align: center; /* Alineea el contenido de todas las tablas */
+}
+
+table td button { /* Botón de la tabla*/
+    width: 100%; /* Hace que ocupe todo el ancho disponible*/
+    margin: 0 auto; /* Hace que se centren todos los botones*/
+}
+
+button.btn-primary { /* Clase del botón*/
+    margin-left: 10px; /* Aplica un espacio del botón primario a la izquierda*/
+}
+
+@media(max-width: 768px){ /* Tamaños de media querys en pantallas pequeñas*/
+    .productos-container { /* Contenedor*/
+        padding: 15px; /* Se reduce el padding en pantallas pequeñas*/
+    }
+
+    .productos-container h2 { /* Contenedor*/
+        font-size: 1.5rem; /* Tamaño de fuente se establece en 1.5rem*/
+    }
+
+    input, button { /* Botón y campo*/
+        font-size: 0.9rem; /* Aplica una reducción de tamaño en la fuente de 0.9rem*/
+    }
+
+    table th, /* Tablas */
+    table td { /* Tablas */
+        padding: 8px; /* Aplica un espacio interno en las celdas de 8px */
+        font-size: 0.8rem; /* Tamaño de fuente en 0.8rem*/
+    }
+}
+
+.product-image { /* Imagen del producto */
+    max-width: 100px; /* Se aplica un ancho máximo de 100px */
+    height: auto; /* Altura automatica */
+    border: 1px solid #ffffff; /* Borde blanco */
+    border-radius: 5px; /* Borde redondo */
+    margin-top: 10px; /* Espacio de la parte de arriba de 10px */
+  }

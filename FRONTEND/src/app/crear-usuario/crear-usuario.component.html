@@ -1,0 +1,33 @@
+<form [formGroup]="usuarioForm" (ngSubmit)="crearUsuario()"> <!-- Formulario con validación para crear un usuario -->
+    <div> <!-- Apertura div -->
+      <input formControlName="nombre" placeholder="Nombre de usuario" required> <!-- Campo dónde se ingresa el nombre  del usuario -->
+      <div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched"> <!-- Validación los valores ingresados -->
+        <small class="error">El nombre es obligatorio</small> <!-- Clase tipo alerta donde se muestra que se debe llenar el campo y no estar vacío -->
+      </div> <!-- Cierre div -->
+    </div> <!-- Cierre div -->
+    <div> <!-- Apertura div -->
+      <input formControlName="email" placeholder="Correo de usuario" required> <!-- Campo dónde se ingresa el correo del usuario -->
+      <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched"> <!-- Validación los valores ingresados -->
+        <small class="error" *ngIf="usuarioForm.get('email')?.hasError('required')">El correo es obligatorio</small> <!-- Clase tipo alerta donde se muestra que se debe llenar el campo y no estar vacío -->
+        <small class="error" *ngIf="usuarioForm.get('email')?.hasError('email')">El correo no es válido</small> <!-- Clase tipo alerta donde se muestra que se debe llenar el campo y no estar vacío -->
+      </div> <!-- Cierre div -->
+    </div> <!-- Cierre div -->
+    <div> <!-- Apertura div -->
+        <select formControlName="rol" required> <!-- Select dónde hay opciones para seleccionar el rol del usuario y es obligatorio -->
+          <option value="" disabled>Selecciona el rol</option> <!-- Opción de selección -->
+          <option value="admin">Administrador</option> <!-- Rol de administrador -->
+          <option value="usuario">Usuario</option> <!-- Rol de usuario -->
+        </select> <!-- Cierre select -->
+        <div *ngIf="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched"> <!-- Validación los valores ingresados -->
+          <small class="error">El rol es obligatorio</small> <!-- Clase tipo alerta donde se muestra que se debe llenar el campo y no estar vacío -->
+        </div> <!-- Cierre div -->
+      </div> <!-- Cierre div -->
+    <div> <!-- Apertura div -->
+      <input formControlName="password" type="password" placeholder="Contraseña de usuario" required> <!-- Campo dónde se ingresa la contraseña del usuario -->
+      <div *ngIf="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched"> <!-- Validación los valores ingresados -->
+        <small class="error">La contraseña es obligatoria</small> <!-- Clase tipo alerta donde se muestra que se debe llenar el campo y no estar vacío -->
+      </div> <!-- Cierre div -->
+    </div> <!-- Cierre div -->
+    <button type="submit" [disabled]="usuarioForm.invalid">Crear usuario</button> <!-- Botón que envía la información para crear el nuevo usuario -->
+  </form> <!-- Cierre formulario -->
+  
